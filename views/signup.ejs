@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign up</title>
+    <%- include("./partials/header.ejs") %>
+</head>
+
+<body style="background-color: #1e1e1e" style="overflow: hidden; margin: 0;">
+    <section>
+        <div class="text-center text-lg-start" style="background-color: #1e1e1e;">
+            <div class="container" style="position: absolute; top: 2%; left: 50%; transform: translateX(-50%);">
+                <div class="row gx-lg-5 align-items-center">
+                    <div class="col-lg-6 mb-4 mb-lg-0">
+                        <h1 class="my-5 display-3 fw-bold ls-tight" style="color: white">
+                            Join DeepTalks, <br />
+                            <span style="color: rgba(68, 94, 229, 1);">where discussions come alive!</span>
+                        </h1>
+                        <p class="ls-tight" style="color: white">
+                            Connect with like-minded individuals, share your insights, and explore a world of engaging
+                            conversations at DeepTalks - your go-to online forum community.
+                        </p>
+                    </div>
+                    <div class="col-lg-6 mb-4 mb-lg-0" style="padding-left: 100px; ">
+                        <div class="card mb-2" style="max-width: fit-content">
+                            <div class="card-body py-3 px-lg-5">
+                                <div align="center" class="mb-6"><img src="/img/logo_new.png" alt="" height="120">
+                                    <h5><b>Sign up</b></h5><br>
+                                    Please fill out this form to create an account
+                                </div><br>
+                                <form action="/signup" method="POST" enctype="multipart/form-data">
+
+                                    <% if (messages.error && messages.error.length> 0) { %>
+                                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                            <%= messages.error[0] %>
+                                                <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                                    aria-label="Close"></button>
+                                        </div>
+                                        <% } %>
+
+                                            <% if (messages.success && messages.success.length> 0) { %>
+                                                <div class="alert alert-success alert-dismissible fade show"
+                                                    role="alert">
+                                                    <%= messages.success[0] %>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                                            aria-label="Close"></button>
+                                                </div>
+                                                <% } %>
+
+                                                    <div class="form-outline mb-4">
+                                                        <input type="text" id="form3Example3" class="form-control"
+                                                            placeholder="Full name" name="fullName" />
+                                                    </div>
+                                                    <div class="form-outline mb-4">
+                                                        <input type="text" id="usernameInput" class="form-control"
+                                                            placeholder="Username" name="username"
+                                                            oninput="checkExistingAccount()" />
+                                                        <span id="usernameAvailability"></span>
+                                                    </div>
+
+                                                    <div class="form-outline mb-4">
+                                                        <input type="email" id="emailInput" class="form-control"
+                                                            placeholder="Email" name="email"
+                                                            oninput="checkExistingAccount()" />
+                                                        <span id="emailAvailability"></span>
+                                                    </div>
+                                                    <div class="form-outline mb-4">
+                                                        <input type="password" id="form3Example4" class="form-control"
+                                                            placeholder="Password" name="password" />
+                                                    </div>
+                                                    <div class="form-outline mb-4">
+                                                        <input type="password" id="form3Example5" class="form-control"
+                                                            placeholder="Confirm Password" name="confirmPassword" />
+                                                    </div>
+                                                    <div class="form-outline mb-4">
+                                                        <input type="file" id="form3Example5" class="form-control"
+                                                            name="image" />
+                                                    </div>
+                                                    <div align="center">
+                                                        <button type="submit" class="btn btn btn-block mb-4"
+                                                            style="width: 100%;background-color:#4154f1;color:white;">
+                                                            Sign up
+                                                        </button>
+                                                        <a href="/signin">Already have an account?</a>
+                                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+    <script>
+        function checkExistingAccount() {
+            const username = $('#usernameInput').val();
+            const email = $('#emailInput').val();
+
+            if (username.length > 0 || email.length > 0) {
+                $.ajax({
+                    type: 'POST',
+                    url: '/check-existing-account',
+                    data: { username: username, email: email },
+                    success: function (response) {
+                        if (response.exists) {
+                            if (username.length > 0) {
+                                $('#usernameAvailability').text('Username is already taken. Please choose a different one.');
+                                $('#usernameAvailability').css('color', 'red');
+                            }
+                            if (email.length > 0) {
+                                $('#emailAvailability').text('Email is already in use. Please use a different one.');
+                                $('#emailAvailability').css('color', 'red');
+                            }
+                        } else {
+                            if (username.length > 0) {
+                                $('#usernameAvailability').text('Username is available!');
+                                $('#usernameAvailability').css('color', 'green');
+                            }
+                            if (email.length > 0) {
+                                $('#emailAvailability').text('Email is available!');
+                                $('#emailAvailability').css('color', 'green');
+                            }
+                        }
+                    },
+                    error: function (error) {
+                        console.error('Error checking existing account:', error);
+                    }
+                });
+            }
+        }
+    </script>
+</body>
+
+</html>

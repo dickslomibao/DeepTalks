@@ -1,0 +1,181 @@
+<%- include('../../partials/header_client.ejs'); -%>
+    <div class="col-lg-7 create">
+        <div class="d-flex align-items-center justify-content-between middle-nav">
+            <h5 class="title" style="color: var(--textColor);">
+                Update Channel
+            </h5>
+            <div class="d-flex align-items-center" style="gap: 20px;">
+
+                <!-- <div class="d-flex align-items-center justify-content-center"
+                    style="background-color: var(--secondaryBG);position: relative;;height: 35px;width: 35px;border:1px solid var(--secondaryBG);border-radius: 50%;">
+                    <i class="fal fa-bell"></i>
+                    <div class="d-flex align-items-center justify-content-center"
+                        style="top:0; right: 0;;border-radius: 50%;font-size: 10px;font-weight: 800;color:white;position: absolute;width:15px;height:15px;background-color: var(--primaryBG);">
+                        2</div>
+                </div>
+                <span style="color: var(--secondaryBG);">
+                    |
+                </span> -->
+                <!-- <div class="d-flex align-items-center" style="gap:10px;cursor:pointer">
+                    <img src="<%= user.profile %>" alt=""
+                        style="width:30px;height:30px;object-fit: cover;border-radius: 50%;">
+                    <h6 style="color: var(--textColor);font-size:15px">
+                        Hi, <%= user.name %>
+                    </h6>
+                    <i class="fal fa-caret-down"></i>
+                </div> -->
+                <img src="<%= user.profile %>" alt=""
+                    style="width:30px;height:30px;object-fit: cover;border-radius: 50%;">
+                <div class="dropdown">
+                    <h6 style="color: var(--textColor); cursor: pointer;" id="dropdownMenuButton"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                        Hi, <%= user.name %> <i class="fal fa-caret-down"></i>
+                    </h6>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <a class="dropdown-item" href="#" data-bs-toggle="modal"
+                            data-bs-target="#updateProfileModal">Profile</a>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li><a class="dropdown-item" href="/signout">Sign Out</a></li>
+                    </ul>
+                </div>
+                <div class="modal fade" id="updateProfileModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content" style="background-color: var(--mainBG); color: white;"><br>
+                            <h5 class="text-white" style="margin-left: 10px;">Profile information</h5>
+                            <div class="modal-body" style="background-color: var(--mainBG);">
+                                <img src="<%= user.profile %>" alt=""
+                                    style="width:150px;height:150px;object-fit: cover;border-radius: 50%;">
+                                <!-- Form for updating profile picture -->
+                                <form action="/updateClientProfile" method="post" enctype="multipart/form-data"
+                                    class="needs-validation" novalidate>
+                                    <div class="mb-1">
+                                        <label for="newProfilePic" class="form-label"
+                                            style="color: var(--textColor);margin-bottom: 10px;">Change Profile
+                                            Picture:</label>
+                                        <input type="file" class="form-control-file" id="newProfilePic"
+                                            name="newProfilePic" accept="image/*"
+                                            style="color: var(--textColor);margin-bottom: 10px; background-color: var(--mainBG);">
+
+                                    </div>
+                                    <center>
+                                        <button type="submit" class="btn btn-primary w-100"
+                                            style="background-color:#4154f1;color:white;">Update Profile
+                                            Picture</button>
+                                    </center>
+                                </form><br>
+
+                                <form method="POST" action="/updateClientInfo">
+                                    <div class="mb-3">
+                                        <label for="name" class="form-label">Full Name:</label>
+                                        <input type="text" class="form-control" id="newFullName" name="newFullName"
+                                            style="background-color: var(--mainBG);color:white"
+                                            value="<%= user.name %>">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="description" class="form-label">Username:</label>
+                                        <input type="text" class="form-control" id="newUsername" name="newUsername"
+                                            value="<%= user.username %>"
+                                            style="background-color: var(--mainBG);color:white">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="image" class="form-label">Email:</label>
+                                        <input type="text" class="form-control" id="newEmail" name="newEmail"
+                                            value="<%= user.email %>"
+                                            style="background-color: var(--mainBG);color:white">
+                                    </div>
+                                    <center>
+                                        <button type="submit" class="btn btn-primary w-100"
+                                            style="background-color:#4154f1;color:white;">Update Profile
+                                            Information</button>
+                                    </center>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+        <div id="center-container">
+            <form method="POST" action="" id="create_channel_form">
+                <div class="mb-3">
+                    <label for="name" class="form-label">Channel name:</label>
+                    <input type="text" class="form-control" value="<%= c.name %>" name="name" id="name">
+                </div>
+                <div class="mb-3">
+                    <label for="description" class="form-label">Channel description:</label>
+                    <textarea class="form-control" id="description" name="description"
+                        rows="5"><%= c.description %></textarea>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Channel Category:</label>
+                    <div class="row">
+                        <% category.forEach(element=> { %>
+                            <div class="col-lg-4">
+                                <div class="form-check">
+                                    <input <% if (c_category.includes(element.category)) { %>
+                                    checked
+                                    <% } %> class="form-check-input" name="category[]" type="checkbox"
+                                        value="<%= element.id %>" id="flexCheckDefault">
+                                            <label class="form-check-label" for="flexCheckDefault">
+                                                <%= element.category %>
+                                            </label>
+                                </div>
+                            </div>
+                            <% }) %>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Channel Settings:</label>
+                    <div class="form-check">
+                        <input class="form-check-input" <% if (c.private==2) { %>
+                        checked
+                        <% } %> name="private" type="checkbox" value="2" id="flexCheckDefault">
+                            <label class="form-check-label" for="flexCheckDefault">
+                                Private channel
+                            </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" <% if (c.auto_accept_post==2) { %>
+                        checked
+                        <% } %> name="auto_accept_post" type="checkbox" value="2"
+                            id="flexCheckDefault">
+                            <label class="form-check-label" for="flexCheckDefault">
+                                Auto accept post
+                            </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" <% if (c.allow_members_add==2) { %>
+                        checked
+                        <% } %> name="allow_members_add" type="checkbox" value="2"
+                            id="flexCheckDefault">
+                            <label class="form-check-label" for="flexCheckDefault">
+                                Allow members to add others
+                            </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" <% if (c.auto_accept_joined==2) { %>
+                        checked
+                        <% } %> name="auto_accept_joined" type="checkbox" value="2"
+                            id="flexCheckDefault">
+                            <label class="form-check-label" for="flexCheckDefault">
+                                Auto accept joined users
+                            </label>
+                    </div>
+                </div>
+
+                <div class="d-flex align-items-center justify-content-end">
+                    <button type="submit" class="btn btn-primary">Update</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <%- include('partials/side.ejs'); -%>
+
+        <%- include('../../partials/footer_client.ejs'); -%>

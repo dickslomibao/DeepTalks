@@ -1,0 +1,46 @@
+<% if (typeof side=='undefined' ) { %>
+    <div class="col-lg-3 right">
+        <h5>Top Contributor</h5>
+        <div class="row">
+
+            <% topContributor.forEach(element=> { %>
+                <div class="col-lg-12 mb-3">
+                    <div class="user d-flex align-items-center justify-content-between" style="gap: 10px;">
+
+                        <div class=" d-flex align-items-center" style="gap: 10px;">
+                            <img src="<%= element.profile_pic %>" alt=""
+                                style="width:35px;height:35px;object-fit: cover;border-radius: 50%;">
+                            <div>
+                                <h6 style="font-size: 14px;margin:0 0 2px 0">
+                                    <%= element.fullName %>
+                                </h6>
+                                <p style="font-size: 12px;color:var(--textColor)">
+                                    <%= element.username %>
+                                </p>
+                            </div>s
+                        </div>
+                        <div class="d-flex align-items-center justify-content-center" style="column-gap: 10px;">
+                            <i class="far fa-lasso"></i>
+                            <h6 style="margin: 0;">
+                                <%= element.total_threads %>
+                            </h6>
+                        </div>
+                    </div>
+                </div>
+                <% }) %>
+
+
+        </div>
+    </div>
+    <% } %>
+        </div>
+        </div>
+        <script src="https://code.jquery.com/jquery-3.6.4.min.js"
+            integrity="sha256-oP6HI/tt9aZz1zUCgf3vANwXOkDYY6ibh1vkILtE0ns=" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+            crossorigin="anonymous"></script>
+
+        </body>
+
+        </html>

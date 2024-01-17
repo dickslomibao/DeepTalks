@@ -1,0 +1,91 @@
+<%- include('../../partials/header_client.ejs'); -%>
+<div class="col-lg-7 center update">
+    <div class="d-flex align-items-center justify-content-between middle-nav">
+        <h5 class="title">Update channel</h5>
+        <div class="d-flex align-items-center" style="gap: 20px;">
+            <div class="d-flex align-items-center justify-content-center"
+                style="background-color: var(--secondaryBG);position: relative;height: 35px;width: 35px;border:1px solid var(--secondaryBG);border-radius: 50%;">
+                <i class="fal fa-bell"></i>
+                <div class="d-flex align-items-center justify-content-center"
+                    style="top:0; right: 0;border-radius: 50%;font-size: 10px;font-weight: 800;color:white;position: absolute;width:15px;height:15px;background-color: var(--primaryBG);">
+                    2</div>
+            </div>
+            <span style="color: var(--secondaryBG);">
+                |
+            </span>
+            <div class="d-flex align-items-center" style="gap:10px;cursor:pointer">
+                <img src="<%= user.profile %>" alt=""
+                    style="width:30px;height:30px;object-fit: cover;border-radius: 50%;">
+                <h6 style="color: var(--textColor);font-size:15px">
+                    Hi, <%= user.name %>
+                </h6>
+                <i class="fal fa-caret-down"></i>
+            </div>
+        </div>
+    </div>
+    <div id="center-container">
+        <form method="POST" action="/update/<%= channel.id %>" id="update_channel_form" enctype="multipart/form-data">
+            <div class="mb-3">
+                <label for="name" class="form-label">Channel name:</label>
+                <input type="text" class="form-control" name="name" id="name" value="<%= channel.name %>">
+            </div>
+            <div class="mb-3">
+                <label for="description" class="form-label">Channel description:</label>
+                <textarea class="form-control" id="description" name="description" rows="5"><%= channel.description %></textarea>
+            </div>
+            <div class="mb-3">
+                <label for="image" class="form-label">Channel thumbnail:</label>
+                <input type="file" class="form-control" name="image" id="image">
+                <img src="<%= channel.thumbnail %>" alt="Current Thumbnail" class="mt-2" style="max-width: 200px;">
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Channel Category:</label>
+                <div class="row">
+                    <% category.forEach(element => { %>
+                        <div class="col-lg-4">
+                            <div class="form-check">
+                                <input class="form-check-input" name="category[]" type="checkbox"
+                                    value="<%= element.id %>" id="flexCheckDefault" <%= channel.categories.includes(element.id) ? 'checked' : '' %>>
+                                <label class="form-check-label" for="flexCheckDefault">
+                                    <%= element.category %>
+                                </label>
+                            </div>
+                        </div>
+                    <% }) %>
+                </div>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Channel Settings:</label>
+                <div class="form-check">
+                    <input class="form-check-input" name="private" type="checkbox" value="2" id="privateCheck" <%= channel.private === 2 ? 'checked' : '' %>>
+                    <label class="form-check-label" for="privateCheck">
+                        Private channel
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" name="auto_accept_post" type="checkbox" value="2" id="autoAcceptPostCheck" <%= channel.auto_accept_post === 2 ? 'checked' : '' %>>
+                    <label class="form-check-label" for="autoAcceptPostCheck">
+                        Auto accept post
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" name="allow_members_add" type="checkbox" value="2" id="allowMembersAddCheck" <%= channel.allow_members_add === 2 ? 'checked' : '' %>>
+                    <label class="form-check-label" for="allowMembersAddCheck">
+                        Allow members to add others
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" name="auto_accept_joined" type="checkbox" value="2" id="autoAcceptJoinedCheck" <%= channel.auto_accept_joined_members === 2 ? 'checked' : '' %>>
+                    <label class="form-check-label" for="autoAcceptJoinedCheck">
+                        Auto accept joined users
+                    </label>
+                </div>
+            </div>            
+            <div class="d-flex align-items-center justify-content-end">
+                <button type="submit" class="btn btn-primary">Update</button>
+            </div>
+        </form>
+    </div>
+</div>
+<!-- Add the necessary scripts and partials as needed -->
+<%- include('../../partials/footer_client.ejs'); -%>

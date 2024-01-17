@@ -1,0 +1,386 @@
+<%- include('../../partials/header_client.ejs'); -%>
+    <div class="col-lg-7 center">
+        <div class="d-flex align-items-center justify-content-between middle-nav">
+            <h5 class="title">
+                <%= c.name %>
+            </h5>
+
+            <div class="d-flex align-items-center" style="gap: 20px;">
+
+                <!-- <div class="d-flex align-items-center justify-content-center"
+                    style="background-color: var(--secondaryBG);position: relative;;height: 35px;width: 35px;border:1px solid var(--secondaryBG);border-radius: 50%;">
+                    <i class="fal fa-bell"></i>
+                    <div class="d-flex align-items-center justify-content-center"
+                        style="top:0; right: 0;;border-radius: 50%;font-size: 10px;font-weight: 800;color:white;position: absolute;width:15px;height:15px;background-color: var(--primaryBG);">
+                        2</div>
+                </div>
+                <span style="color: var(--secondaryBG);">
+                    |
+                </span> -->
+                <!-- <div class="d-flex align-items-center" style="gap:10px;cursor:pointer">
+                    <img src="<%= user.profile %>" alt=""
+                        style="width:30px;height:30px;object-fit: cover;border-radius: 50%;">
+                    <h6 style="color: var(--textColor);font-size:15px">
+                        Hi, <%= user.name %>
+                    </h6>
+                    <i class="fal fa-caret-down"></i>
+                </div> -->
+                <img src="<%= user.profile %>" alt=""
+                    style="width:30px;height:30px;object-fit: cover;border-radius: 50%;">
+                <div class="dropdown">
+                    <h6 style="color: var(--textColor); cursor: pointer;" id="dropdownMenuButton"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                        Hi, <%= user.name %> <i class="fal fa-caret-down"></i>
+                    </h6>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <a class="dropdown-item" href="#" data-bs-toggle="modal"
+                            data-bs-target="#updateProfileModal">Profile</a>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li><a class="dropdown-item" href="/signout">Sign Out</a></li>
+                    </ul>
+                </div>
+
+
+
+            </div>
+        </div>
+        <div id="center-container">
+            <div class="channel-view">
+                <div style=" margin: 0 0 30px 0;" class="d-flex align-items-center justify-content-between">
+                    <h6>Theads:</h6>
+                    <div>
+                        <a href="/channel/<%= c.id %>/view/create"
+                            style="text-decoration: none;font-size:15px;color:var(--primaryBG);padding:5px 20px;border:1px solid var(--primaryBG);border-radius: 10px;">Add
+                            a thread</a>
+                        <a href="/channel/<%= c.id %>/details"
+                            style="text-decoration: none;font-size:15px;color:var(--primaryBG);padding:5px 20px;"><i
+                                class="far fa-cog" style="color: var(--primaryBG);"></i></a>
+                    </div>
+                </div>
+                <div class="filter d-flex align-items-center justify-content-between">
+                    <div>
+                        <a role="button" class="active" id="allButton">All</a>
+                        <a role="button" class="" id="popularButton">Popular</a>
+                        <a role="button" class="" id="pinnedButton">Pinned threads</a>
+
+                        <% if ( c.user_id==user.userId ) { %>
+                            <a role="button" class="" id="channelPendingThreads">Pending threads</a>
+                            <% } else { %>
+                                <a role="button" id="myPendingThreads" class="">My pending threads</a>
+                                <% } %>
+
+                    </div>
+                    <div class="d-flex align-items-center justify-content-between" style="gap: 15px;">
+                        <!-- <i class="far fa-filter" style="cursor: pointer;"></i> -->
+                        <i class="far fa-sync-alt" id="refresh" style="cursor: pointer;"></i>
+                    </div>
+                </div>
+
+                <div id="thread_container">
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="updateThread" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable">
+            <div class="modal-content" style="background-color: var(--mainBG);padding:15px">
+
+                <div class="modal-body">
+                    <h5 style="color: var(--textColor);margin-bottom: 20px;">Update thread</h5>
+                    <form action="" method="post" id="updateThreadForm">
+                        <div class="mb-2">
+                            <label for="exampleFormControlTextarea1" class="form-label"
+                                style="color: var(--textColor);margin-bottom: 10px  ;">Title:</label>
+                            <input required
+                                style="border: none;background-color:var(--secondaryBG);color:var(--textColor);font-size:15px"
+                                class="form-control" id="title" name="title">
+                        </div>
+                        <div class="mb-2">
+                            <label for="exampleFormControlTextarea1" class="form-label"
+                                style="color: var(--textColor);margin-bottom: 10px  ;">Content:</label>
+                            <textarea required
+                                style="border: none;background-color:var(--secondaryBG);color:var(--textColor);font-size:15px"
+                                class="form-control" id="content" rows="5" name="content"></textarea>
+
+                            <button class="btn btn-primary w-100"
+                                style="border: none;background-color: var(--primaryBG);margin-top: 15px;">Update
+                                thread</button>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <%- include('partials/side.ejs'); -%>
+        <script>
+            let type = 0;
+            $(document).ready(function () {
+                $("#allButton").click(function () {
+                    type = 0;
+                    $("a[role='button']").removeClass("active");
+
+                    $(this).addClass("active");
+                    display();
+                });
+                $("#popularButton").click(function () {
+                    type = 1;
+                    $("a[role='button']").removeClass("active");
+                    $(this).addClass("active");
+                    display();
+                });
+                $("#pinnedButton").click(function () {
+                    type = 2;
+                    $("a[role='button']").removeClass("active");
+
+                    $(this).addClass("active");
+                    display();
+                });
+                $("#channelPendingThreads").click(function () {
+                    type = 3;
+                    $("a[role='button']").removeClass("active");
+                    $(this).addClass("active");
+                    display();
+                });
+                $("#myPendingThreads").click(function () {
+                    type = 4;
+                    $("a[role='button']").removeClass("active");
+                    $(this).addClass("active");
+                    display();
+                });
+                $("#refresh").click(function () {
+                    alertify.success('Refreshing');
+                    display(true);
+                });
+            });
+            display();
+            function display(refresh) {
+                $.ajax({
+                    type: "POST",
+                    url: "/channel/<%= c.id %>/view",
+                    data: {
+                        'type': type
+                    },
+                    success: function (response) {
+                        $('#thread_container').html('');
+                        if (refresh) {
+                            alertify.success('Refresh success');
+                        }
+                        if (response.length == 0) {
+                            $('#thread_container').append(`
+                            <div class="empty">
+                                <h6>No threads yet.</h6>
+                            </div>
+                        `);
+                            return;
+                        }
+
+
+                        response.forEach(element => {
+                            let controller = ``;
+                            // <div class="dropdown">
+                            //   <i class="far fa-ellipsis-v" data-bs-toggle="dropdown" aria-expanded="false" style="padding:5px"></i>
+                            //     <ul class="dropdown-menu">
+                            //    <li><a style="font-size:15px" data-id="${element.id}"  class="dropdown-item edit-thread" href="#">Edit</a></li>
+                            //     <li><a style="font-size:15px" data-id="${element.id}" class="dropdown-item delete-thread" href="#">Delete</a></li>
+                            //     </ul>
+                            //  </div>
+                            if (type == 3) {
+
+                                controller = `<div class="dropdown">
+                                            <i class="far fa-ellipsis-v" data-bs-toggle="dropdown" aria-expanded="false" style="padding:5px"></i>
+                                            <ul class="dropdown-menu">
+                                            <li><a style="font-size:15px" data-id="${element.id}"  class="dropdown-item accept-thread" href="#">Accept</a></li>
+                                            <li><a style="font-size:15px" data-id="${element.id}" class="dropdown-item denied-thread" href="#">Denied</a></li>
+                                            </ul>
+                                        </div>`;
+                            } else {
+                                if ('<%= c.user_id %>' == '<%= user.userId %>' && '<%= user.userId %>' != element.user_id) {
+                                    controller = `<div class="dropdown">
+                                        <i class="far fa-ellipsis-v" data-bs-toggle="dropdown" aria-expanded="false" style="padding:5px"></i>
+                                        <ul class="dropdown-menu">
+                                        <li><a style="font-size:15px" data-id="${element.id}" class="dropdown-item delete-thread" href="#">Delete</a></li>
+                                        <li><a style="font-size:15px" data-id="${element.id}" class="dropdown-item pin-thread" href="#">${element.pin == 2 ? "Unpin" : "Pin"}</a></li>
+                                    </ul>
+                                    </div>`;
+                                } else {
+                                    if ('<%= user.userId %>' == element.user_id) {
+                                        controller = `<div class="dropdown">
+                                            <i class="far fa-ellipsis-v" data-bs-toggle="dropdown" aria-expanded="false" style="padding:5px"></i>
+                                            <ul class="dropdown-menu">
+                                            <li><a style="font-size:15px" data-id="${element.id}"  class="dropdown-item edit-thread" href="#">Edit</a></li>
+                                            <li><a style="font-size:15px" data-id="${element.id}" class="dropdown-item delete-thread" href="#">Delete</a></li>
+                                            </ul>
+                                        </div>`;
+                                    }
+                                    if ('<%= user.userId %>' == element.user_id && '<%= c.user_id%>' == element.user_id) {
+                                        controller = `<div class="dropdown">
+                                            <i class="far fa-ellipsis-v" data-bs-toggle="dropdown" aria-expanded="false" style="padding:5px"></i>
+                                            <ul class="dropdown-menu">
+                                            <li><a style="font-size:15px" data-id="${element.id}"  class="dropdown-item edit-thread" href="#">Edit</a></li>
+                                            <li><a style="font-size:15px" data-id="${element.id}" class="dropdown-item delete-thread" href="#">Delete</a></li>
+                                            <li><a style="font-size:15px" data-id="${element.id}" class="dropdown-item pin-thread" href="#">${element.pin == 2 ? "Unpin" : "Pin"}</a></li>
+                                            </ul>
+                                        </div>`;
+                                    }
+                                }
+                            }
+                            var momentObject = moment(element.date_created);
+                            $('#thread_container').append(`
+                        <div class="thread-card"  style="position:relative">
+                            ${element.pin == 2 ? '<i class="far fa-map-pin" style="position:absolute;top:-5px;right:2%;color:rgba(255,0,0,.7)"></i>' : ''}
+                            <div class="d-flex align-items-center justify-content-between">
+                                <div class="user d-flex align-items-center" style="gap: 10px;">
+                                
+                                    <img src="${element.profile_pic}"
+                                        alt="">
+                                    <div>
+                                        <h6>${element.fullName}</h6>
+                                        <p>${element.username}</p>
+                                    </div>
+                                </div>
+                                `+ controller + `
+                            </div>
+                           <div onClick = "location.href='/channel/<%= c.id %>/view/thread/${element.id}/view'">
+                            <h6>${element.title}</h6>
+                            <div class="d-flex align-items-center justify-content-between">
+                                 <div class="">
+                                     <div>
+                                         <span style="font-size:13px">Date posted: ${momentObject.format('MMM DD, YYYY -  hh:mm A')}</span>
+                                     </div>
+                                 </div>
+                                 <div class="d-flex align-items-center" style="column-gap:10px">
+                                     <div class="replies">
+                                         <i class="far fa-comment"></i>
+                                         <span>${element.total_replies}</span>
+                                     </div>
+                                     <div class="replies">
+                                         <i class="fal fa-eye"></i>
+                                         <span>${element.total_views}</span>
+                                     </div>
+                                 </div>
+                            </div>
+                           </div>
+                        </div>
+                        `);
+                        });
+                    }
+                });
+            }
+            let thread_id = "";
+            $(document).on('click', '.edit-thread', function () {
+                thread_id = $(this).attr('data-id');
+                $('#updateThread').modal('show');
+
+                $.ajax({
+                    type: "POST",
+                    url: "/channel/getsinglechannelthread/" + thread_id,
+
+                    success: function (response) {
+                        $('#title').val(response.title);
+                        $('#content').val(response.content);
+                    }
+                });
+            });
+            $(document).on('click', '.delete-thread', function () {
+                thread_id = $(this).attr('data-id');
+                alertify.confirm("Are you sure you want to delete?", function (e) {
+                    if (e) {
+                        // User clicked "OK"
+                        $.ajax({
+                            type: "POST",
+                            url: `/channel/getsinglechannelthread/${thread_id}/delete`,
+
+                            success: function (response) {
+                                if (response.code == 200) {
+                                    alertify.success('Deleted successfully');
+                                    display();
+                                }
+                            }
+                        });
+                    }
+                }).set({ title: "Opps" });
+            });
+            $(document).on('click', '.accept-thread', function () {
+                thread_id = $(this).attr('data-id');
+                alertify.confirm("Are you sure you want to accept?", function (e) {
+                    if (e) {
+                        // User clicked "OK"
+                        $.ajax({
+                            type: "POST",
+                            url: `/channel/getsinglechannelthread/${thread_id}/accept`,
+                            success: function (response) {
+                                console.log(response);
+                                if (response.code == 200) {
+                                    alertify.success('Accepted successfully');
+                                    display();
+                                }
+                            }
+                        });
+                    }
+                }).set({ title: "Opps" });
+            });
+            $(document).on('click', '.pin-thread', function () {
+                thread_id = $(this).attr('data-id');
+                alertify.confirm("Are you sure you want to pin?", function (e) {
+                    if (e) {
+                        // User clicked "OK"
+                        $.ajax({
+                            type: "POST",
+                            url: `/channel/getsinglechannelthread/${thread_id}/pin`,
+                            success: function (response) {
+                                console.log(response);
+                                if (response.code == 200) {
+                                    alertify.success('Pinned successfully');
+                                    display();
+                                }
+                            }
+                        });
+                    }
+                }).set({ title: "Opps" });
+            });
+            $(document).on('click', '.denied-thread', function () {
+                thread_id = $(this).attr('data-id');
+                alertify.confirm("Are you sure you want to denied?", function (e) {
+                    if (e) {
+                        // User clicked "OK"
+                        $.ajax({
+                            type: "POST",
+                            url: `/channel/getsinglechannelthread/${thread_id}/delete`,
+                            success: function (response) {
+                                console.log(response);
+                                if (response.code == 200) {
+                                    alertify.success('Denied successfully');
+                                    display();
+                                }
+                            }
+                        });
+                    }
+                }).set({ title: "Opps" });
+            });
+            $('#updateThreadForm').submit(function (e) {
+                e.preventDefault();
+                $.ajax({
+                    type: "POST",
+                    url: `/channel/getsinglechannelthread/${thread_id}/save`,
+                    data: {
+                        'title': $('#title').val(),
+                        'content': $('#content').val(),
+                    },
+                    success: function (response) {
+                        if (response.code == 200) {
+                            $('#updateThread').modal('hide');
+                            display();
+                            alertify.set('notifier', 'position', 'bottom-right');
+                            alertify.success('Updated successfully');
+                        }
+                    }
+                });
+            });
+
+        </script>
+
+        <%- include('../../partials/footer_client.ejs'); -%>

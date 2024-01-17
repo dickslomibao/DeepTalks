@@ -1,0 +1,330 @@
+:root {
+    --mainBG: #1D1B29;
+    --textColor: #f5f5f5;
+    --secondaryBG: #282828;
+    --borderColor: #282828;
+    --primaryBG: #57B9E8;
+    --inputShadow: rgba(68, 94, 229, 1);
+}
+
+body {
+    background-color: var(--mainBG);
+}
+
+body * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Roboto', sans-serif;
+
+}
+
+.body-container {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    flex: 1, 1, 1;
+}
+
+.nav-bar-side h5 {
+    font-size: 25px;
+    text-align: center;
+    color: var(--textColor);
+}
+
+.nav-bar-side {
+    padding: 0;
+    border-right: 1px solid var(--borderColor);
+}
+
+.nav-bar-side .logo {
+    padding: 40px 20px;
+    /* border-bottom: 1px solid var(--borderColor); */
+}
+
+.nav-bar-side ul {
+
+
+    margin: 0 20px;
+    border-radius: 10px;
+    padding: 20px 0 15px 0;
+    background-color: var(--primaryBG);
+    list-style: none;
+}
+
+.nav-bar-side ul li {
+    margin-bottom: 5px;
+    padding: 5px 20px;
+
+}
+
+.nav-bar-side ul li a {
+    color: var(--textColor);
+    text-decoration: none;
+    font-size: 15px;
+}
+
+.label-channel {
+    margin: 20px;
+}
+
+.label-channel p,
+i {
+    font-size: 15px;
+    color: var(--textColor);
+}
+
+.channel-container {
+    padding: 0 20px;
+}
+
+.channel-card img {
+    width: 25px;
+    border-radius: 100%;
+    object-fit: cover;
+    height: 25px;
+}
+
+.channel-card h6 {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: var(--textColor);
+    font-size: 15px;
+    font-weight: 400;
+}
+
+.thread-card {
+    cursor: pointer;
+    margin-bottom: 10px;
+    border-radius: 15px;
+    padding: 20px;
+    background-color: #282634;
+    border: 1px solid var(--secondaryBG);
+}
+
+.thread-card .user {}
+
+.thread-card .user img {
+    width: 35px;
+    border-radius: 100%;
+    object-fit: cover;
+    height: 35px;
+}
+
+.thread-card h6 {
+    margin: 20px 0 15px 0;
+    color: var(--textColor);
+}
+
+.thread-card .user h6 {
+
+    font-size: 14px;
+    margin: 0 0 2px 0;
+    color: var(--textColor);
+}
+
+.thread-card .user p {
+    font-size: 12px;
+    margin: 0;
+    color: var(--textColor);
+}
+
+.thread-card span {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--textColor);
+}
+
+.thread-card .replies {
+    color: var(--textColor);
+    height: 35px;
+    border: 1px solid var(--secondaryBG);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    column-gap: 10px;
+    width: 70px;
+    border-radius: 10px;
+}
+
+.thread-card .replies span {
+    font-size: 16px;
+}
+
+.filter {
+    margin: 10px 0 30px 0;
+}
+
+.filter a {
+    border-radius: 5px;
+    margin-right: 20px;
+    font-size: 15px;
+    text-decoration: none;
+    color: var(--primaryBG);
+    padding: 5px 0;
+
+}
+
+.filter .active {
+    color: black;
+    padding: 5px 20px;
+    background-color: var(--primaryBG);
+}
+
+.center {
+    border-right: 1px solid var(--borderColor);
+    padding: 0;
+}
+
+.middle-nav {
+    padding: 20px;
+    border-bottom: 1px solid var(--borderColor);
+}
+
+.center .title {
+    font-weight: 400;
+    color: var(--textColor);
+}
+
+.create label {
+    font-size: 15px;
+    color: var(--textColor);
+}
+
+.create input[type="text"] {
+    background-color: var(--mainBG);
+    border: 1px solid var(--secondaryBG);
+    color: var(--textColor);
+    font-size: 15px;
+    padding: 10px;
+}
+
+.create input[type="file"] {
+    background-color: var(--mainBG);
+    border: 1px solid var(--secondaryBG);
+    color: var(--textColor);
+    font-size: 15px;
+    height: 45px;
+
+}
+
+.create input[type="file"]::-webkit-file-upload-button {
+    background-color: var(--secondaryBG);
+    color: var(--textColor);
+    height: 45px;
+
+}
+
+.create input[type="file"]::-webkit-file-upload-button:hover {
+    background-color: var(--secondaryBG);
+    color: var(--textColor);
+}
+
+.create label {
+    margin-bottom: 15px
+}
+
+.create textarea {
+    background-color: var(--mainBG);
+    border: 1px solid var(--secondaryBG);
+    color: var(--textColor);
+    font-size: 15px;
+    padding: 10px;
+}
+
+.create textarea:focus {
+    color: var(--textColor);
+    background-color: var(--mainBG);
+    border: 1px solid var(--secondaryBG);
+}
+
+.create .form-check-input {
+    background-color: var(--mainBG);
+    border: 1px solid var(--secondaryBG);
+
+}
+
+.create button {
+    margin-top: 20px;
+    background-color: var(--primaryBG);
+    font-size: 15px;
+    padding: 8px 40px;
+}
+
+.create label.error {
+    margin-top: 10px;
+    font-size: 12px;
+    color: rgba(255, 0, 0, .9);
+    font-weight: 500;
+}
+
+.right {
+    padding: 20px;
+}
+
+.right h5 {
+    margin-bottom: 20px;
+    color: var(--textColor);
+}
+
+.right h6 {
+    margin-bottom: 10px;
+    color: var(--textColor);
+}
+
+.right h6 i {
+    margin-right: 10px;
+}
+
+.form-control:focus,
+.form-check-input:focus,
+select:focus {
+    background-color: var(--secondaryBG);
+    border-color: var(--primaryBG) !important;
+    box-shadow: 0px 1px 0px rgba(0, 0, 0, 0.075) inset,
+        0px 0px 5px var(--inputShadow) !important;
+}
+
+#center-container {
+    padding: 20px;
+    overflow: auto;
+    height: calc(100vh - 95px);
+}
+
+#center-container::-webkit-scrollbar {
+    margin-left: 10px;
+    width: 5px;
+}
+
+#center-container::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+}
+
+#center-container::-webkit-scrollbar-thumb {
+    background-color: var(--primaryBG);
+
+}
+
+.channel-view h5 {
+
+    color: var(--textColor);
+}
+
+.channel-view h6 {
+
+    color: var(--textColor);
+}
+
+.empty {
+    border-radius: 10px;
+    border: 1px solid var(--secondaryBG);
+    padding: 50px;
+    text-align: center;
+
+    color: var(--textColor);
+}
+
+.empty h6 {
+    font-size: 15px;
+}

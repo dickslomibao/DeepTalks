@@ -1,0 +1,279 @@
+<%- include('../partials/header_client.ejs'); -%>
+    <div class="col-lg-7 center">
+
+        <div class="d-flex align-items-center justify-content-between middle-nav">
+            <h5 class="title">Forums</h5>
+            <div class="d-flex align-items-center" style="gap: 10px;">
+                <a href="/threads/create"
+                    style="text-decoration: none;font-size:15px;color:var(--primaryBG);padding:5px 20px;border:1px solid var(--primaryBG);border-radius: 10px;">Create
+                    a thread</a>
+                <span>
+                    |
+                </span>
+                <!-- <div class="d-flex align-items-center justify-content-center"
+                    style="background-color: var(--secondaryBG);position: relative;;height: 35px;width: 35px;border:1px solid var(--secondaryBG);border-radius: 50%;">
+                    <i class="fal fa-bell"></i>
+                    <div class="d-flex align-items-center justify-content-center"
+                        style="top:0; right: 0;;border-radius: 50%;font-size: 10px;font-weight: 800;color:white;position: absolute;width:15px;height:15px;background-color: var(--primaryBG);">
+                        2</div>
+                </div>
+                <span>
+                    |
+                </span> -->
+                <div class="d-flex align-items-center" style="gap:10px;cursor:pointer">
+                    <img src="<%= user.profile %>" alt=""
+                        style="width:30px;height:30px;object-fit: cover;border-radius: 50%;">
+                    <div class="dropdown">
+                        <h6 style="color: var(--textColor); cursor: pointer;" id="dropdownMenuButton"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            Hi, <%= user.name %> <i class="fal fa-caret-down"></i>
+                        </h6>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <a class="dropdown-item" href="#" data-bs-toggle="modal"
+                                data-bs-target="#updateProfileModal">Profile</a>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li><a class="dropdown-item" href="/signout">Sign Out</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="center-container" style="">
+            <div id="view_container">
+                <div class="thread-card">
+                    <div class=" user d-flex align-items-center" style="gap: 10px;">
+
+                        <img src="<%= thread.profile_pic %>" alt="">
+                        <div>
+                            <h6>
+                                <%= thread.fullName %>
+                            </h6>
+                            <p>
+                                <%= thread.username %>
+                            </p>
+                        </div>
+                    </div>
+                    <h5 style="color:var(--textColor);margin:15px 0">
+                        <%= thread.title %>
+                    </h5>
+                    <pre
+                        style="white-space: pre-wrap; word-wrap: break-word;color:  var(--textColor);margin: 0 0 15px 0; font-weight: 500;font-size:15px"><%= thread.content %></pre>
+                    <div class="d-flex align-items-center justify-content-between">
+                        <div class="">
+                            <div>
+                                <span>Category: <%= thread.category %></span>
+                            </div>
+                            <div>
+                                <span style="font-size:13px">Date posted: </span>
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-center" style="column-gap:10px">
+                            <div class="replies">
+                                <i class="far fa-comment"></i>
+                                <span>
+                                    <%= thread.total_replies %>
+                                </span>
+                            </div>
+                            <div class="replies">
+                                <i class="fal fa-eye"></i>
+                                <span>
+                                    <%= thread.total_views %>
+                                </span>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="d-flex align-items-center justify-content-between" style="margin:30px 0">
+                    <h6 style="color: white;">Replies:</h6>
+                    <a role="button" data-bs-toggle="modal" data-bs-target="#exampleModal"
+                        style="color: var(--primaryBG);text-decoration:none;font-size:15px;border:1px solid var(--primaryBG);padding:5px 20px;border-radius:10px">Add
+                        reply</a>
+                </div>
+                <div class="filter">
+                    <div>
+                        <a role="button" class="active" id="allButton">All</a>
+
+                        <a role="button" class="" id="pinButton">Pinned</a>
+                    </div>
+                </div>
+
+                <div id="reply-container">
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content" style="background-color: var(--mainBG);">
+
+                <div class="modal-body">
+                    <form action="" method="post">
+                        <div class="mb-1">
+                            <label for="exampleFormControlTextarea1" class="form-label"
+                                style="color: var(--textColor);margin-bottom: 10px  ;">Content:</label>
+                            <textarea required
+                                style="border: none;background-color:var(--secondaryBG);color:var(--textColor);font-size:15px"
+                                class="form-control" id="exampleFormControlTextarea1" rows="5"
+                                name="content"></textarea>
+
+                            <button class="btn btn-primary w-100"
+                                style="border: none;background-color: var(--primaryBG);margin-top: 15px;">Add
+                                reply</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+
+        let type = 0;
+
+        $("#allButton").click(function () {
+            type = 0;
+            $("a[role='button']").removeClass("active");
+
+            $(this).addClass("active");
+            display();
+        });
+        $("#pinButton").click(function () {
+            type = 1;
+            $("a[role='button']").removeClass("active");
+
+            $(this).addClass("active");
+            display();
+        });
+        function display() {
+            $.ajax({
+                type: "POST",
+                url: "/threads/<%= thread.id %>/view/comments/retrive",
+                data: {
+                    'type': type
+                },
+                success: function (response) {
+                    $('#reply-container').html('');
+                    if (response.length == 0) {
+                        $('#reply-container').append(`
+                        <div class="empty">
+                            <h6>No reply yet.</h6>
+                        </div>
+                    `);
+                        return;
+                    }
+
+                    response.forEach(element => {
+
+                        let settings = "";
+                        var momentObject = moment(element.date_created);
+
+                        if (element.user_id == '<%= user.userId %>') {
+                            if ('<%= thread.user_id %>' == '<%= user.userId  %>') {
+                                settings = `<div class="dropdown">
+                                <i class="far fa-ellipsis-v" data-bs-toggle="dropdown" aria-expanded="false" style="padding:5px"></i>
+                                <ul class="dropdown-menu">
+                                    <li><a style="font-size:15px"  class="dropdown-item pin-reply"  data-id="${element.id}" href="#">${element.pin == 2 ? "Unpin" : 'Pin'}</a></li>
+        
+                                <li><a style="font-size:15px" data-id="${element.id}" class="dropdown-item delete-reply" href="#">Delete</a></li>
+                                </ul>
+                            </div>`
+                            } else {
+                                settings = `<div class="dropdown">
+                                <i class="far fa-ellipsis-v" data-bs-toggle="dropdown" aria-expanded="false" style="padding:5px"></i>
+                                <ul class="dropdown-menu">    
+                                <li><a style="font-size:15px" data-id="${element.id}" class="dropdown-item delete-reply" href="#">Delete</a></li>
+                                </ul>
+                            </div>`
+                            }
+                        } else {
+                            if ('<%= thread.user_id %>' == '<%= user.userId  %>') {
+                                settings = `<div class="dropdown">
+                                <i class="far fa-ellipsis-v" data-bs-toggle="dropdown" aria-expanded="false" style="padding:5px"></i>
+                                <ul class="dropdown-menu">
+                                    <li><a style="font-size:15px"  class="dropdown-item pin-reply"  data-id="${element.id}" href="#">${element.pin == 2 ? "Unpin" : 'Pin'}</a></li>
+        
+                                <li><a style="font-size:15px" data-id="${element.id}" class="dropdown-item delete-reply" href="#">Delete</a></li>
+                                </ul>
+                            </div>`
+                            }
+                        }
+                        $('#reply-container').append(`
+                    <div class="thread-card"  onClick = "" style="position:relative">
+                        ${element.pin == 2 ? '<i class="far fa-map-pin" style="position:absolute;top:-5px;right:2%;color:rgba(255,0,0,.7)"></i>' : ''}
+
+                        <div class="d-flex align-items-center justify-content-between">
+                            <div class="user d-flex align-items-center" style="gap: 10px;">
+                            
+                                <img src="${element.profile_pic}"
+                                    alt="">
+                                <div>
+                                    <h6>${element.fullName}</h6>
+                                    <p>${element.username}</p>
+                                </div>
+                            </div>
+                            `+ settings + `
+                        </div>
+                        <pre
+                    style="white-space: pre-wrap; word-wrap: break-word;color:  var(--textColor);margin: 15px 0; font-weight: 500;font-size:15px" id="c${element.id}"></pre>
+                       <div class="d-flex align-items-center justify-content-between">
+                            <div class="">
+                                <div>
+                                    <span style="font-size:13px">Date posted: ${momentObject.format('MMM DD, YYYY -  hh:mm A')}</span>
+                                </div>
+                            </div>
+                            
+                       </div>
+                    </div>
+                    
+                    `);
+                        $('#c' + element.id).text(element.content);
+                    });
+
+                }
+            });
+        }
+        display();
+        $(document).on('click', '.delete-reply', function () {
+            let reply_id = $(this).attr('data-id');
+            alertify.confirm("Are you sure you want to delete?", function (e) {
+                if (e) {
+                    $.ajax({
+                        type: "POST",
+                        url: `/threads/getsinglethreadreply/${reply_id}/delete`,
+
+                        success: function (response) {
+                            if (response.code == 200) {
+                                alertify.success('Deleted successfully');
+                                display();
+                            }
+                        }
+                    });
+                }
+            }).set({ title: "Opps" });
+        });
+        $(document).on('click', '.pin-reply', function () {
+            let reply_id = $(this).attr('data-id');
+            alertify.confirm("Are you sure?", function (e) {
+                if (e) {
+                    $.ajax({
+                        type: "POST",
+                        url: `/threads/getsinglethreadreply/${reply_id}/pin`,
+
+                        success: function (response) {
+                            if (response.code == 200) {
+                                alertify.success(response.message);
+                                display();
+                            }
+                        }
+                    });
+                }
+            }).set({ title: "Opps" });
+        });
+    </script>
+    <%- include('../partials/footer_client.ejs'); -%>

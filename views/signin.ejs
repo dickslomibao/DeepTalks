@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign in</title>
+    <%- include("./partials/header.ejs") %>
+</head>
+
+<body style="background-color: #1e1e1e">
+    <section class="">
+        <div class="text-center text-lg-start" style="background-color: #1e1e1e;">
+            <div class="container" style="position: absolute; top: 15%; left: 50%; transform: translateX(-50%);">
+                <div class="row gx-lg-5 align-items-center">
+                    <div class="col-lg-6 mb-4 mb-lg-0">
+                        <h1 class="my-5 display-3 fw-bold ls-tight" style="color: white">
+                            Join DeepTalks, <br />
+                            <span style="color: rgba(68, 94, 229, 1);">where discussions come alive!</span>
+                        </h1>
+                        <p class="ls-tight" style="color: white">
+                            Connect with like-minded individuals, share your insights, and explore a world of engaging
+                            conversations at DeepTalks - your go-to online forum community.
+                        </p>
+                    </div>
+
+                    <div class="col-lg-5 mb-5 mb-lg-0" style="margin-left:80px; padding-right:50px">
+                        <div class="card">
+                            <div class="card-body py-5 px-md-5">
+                                <div align="center" class="mb-4"><img src="/img/logo_new.png" alt="" height="120">
+                                    <h5 class=""><b>Sign in</b></h5><br>
+                                    Fill out the form to sign in with your account
+                                </div>
+                                <% if (error && error.length> 0) { %>
+                                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                        <%= error[0] %>
+                                            <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                                aria-label="Close"></button>
+                                    </div>
+                                    <% } %>
+                                        <form action="/signin" method="POST">
+                                            <div class="form-outline mb-4">
+                                                <input type="text" id="form3Example3" class="form-control"
+                                                    placeholder="Username" name="username" />
+                                            </div>
+                                            <div class="form-outline mb-4">
+                                                <input type="password" id="form3Example4" class="form-control"
+                                                    placeholder="Password" name="password" />
+                                            </div>
+                                            <div align="center">
+                                                <button type="submit" class="btn btn btn-block mb-4"
+                                                    style="width: 100%;background-color:#4154f1;color:white;">
+                                                    Sign in
+                                                </button>
+                                                <a href="/signup">Doesn't have an account yet?</a>
+                                            </div>
+                                        </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+</body>
+
+</html>

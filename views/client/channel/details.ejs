@@ -1,0 +1,155 @@
+<%- include('../../partials/header_client.ejs'); -%>
+    <div class="col-lg-7 center">
+        <div class="d-flex align-items-center justify-content-between middle-nav">
+            <h5 class="title">
+                Channel details
+            </h5>
+
+            <div class="d-flex align-items-center" style="gap: 20px;">
+
+                <!-- <div class="d-flex align-items-center justify-content-center"
+                    style="background-color: var(--secondaryBG);position: relative;;height: 35px;width: 35px;border:1px solid var(--secondaryBG);border-radius: 50%;">
+                    <i class="fal fa-bell"></i>
+                    <div class="d-flex align-items-center justify-content-center"
+                        style="top:0; right: 0;;border-radius: 50%;font-size: 10px;font-weight: 800;color:white;position: absolute;width:15px;height:15px;background-color: var(--primaryBG);">
+                        2</div>
+                </div>
+                <span style="color: var(--secondaryBG);">
+                    |
+                </span> -->
+                <!-- <div class="d-flex align-items-center" style="gap:10px;cursor:pointer">
+                    <img src="<%= user.profile %>" alt=""
+                        style="width:30px;height:30px;object-fit: cover;border-radius: 50%;">
+                    <h6 style="color: var(--textColor);font-size:15px">
+                        Hi, <%= user.name %>
+                    </h6>
+                    <i class="fal fa-caret-down"></i>
+                </div> -->
+                <img src="<%= user.profile %>" alt=""
+                    style="width:30px;height:30px;object-fit: cover;border-radius: 50%;">
+                <div class="dropdown">
+                    <h6 style="color: var(--textColor); cursor: pointer;" id="dropdownMenuButton"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                        Hi, <%= user.name %> <i class="fal fa-caret-down"></i>
+                    </h6>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <a class="dropdown-item" href="#" data-bs-toggle="modal"
+                            data-bs-target="#updateProfileModal">Profile</a>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li><a class="dropdown-item" href="/signout">Sign Out</a></li>
+                    </ul>
+                </div>
+                <div class="modal fade" id="updateProfileModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content" style="background-color: var(--mainBG); color: white;"><br>
+                            <h5 class="text-white" style="margin-left: 10px;">Profile information</h5>
+                            <div class="modal-body" style="background-color: var(--mainBG);">
+                                <img src="<%= user.profile %>" alt=""
+                                    style="width:150px;height:150px;object-fit: cover;border-radius: 50%;">
+                                <!-- Form for updating profile picture -->
+                                <form action="/updateClientProfile" method="post" enctype="multipart/form-data"
+                                    class="needs-validation" novalidate>
+                                    <div class="mb-1">
+                                        <label for="newProfilePic" class="form-label"
+                                            style="color: var(--textColor);margin-bottom: 10px;">Change Profile
+                                            Picture:</label>
+                                        <input type="file" class="form-control-file" id="newProfilePic"
+                                            name="newProfilePic" accept="image/*"
+                                            style="color: var(--textColor);margin-bottom: 10px; background-color: var(--mainBG);">
+
+                                    </div>
+                                    <center>
+                                        <button type="submit" class="btn btn-primary w-100"
+                                            style="background-color:#4154f1;color:white;">Update Profile
+                                            Picture</button>
+                                    </center>
+                                </form><br>
+
+                                <form method="POST" action="/updateClientInfo">
+                                    <div class="mb-3">
+                                        <label for="name" class="form-label">Full Name:</label>
+                                        <input type="text" class="form-control" id="newFullName" name="newFullName"
+                                            style="background-color: var(--mainBG);color:white"
+                                            value="<%= user.name %>">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="description" class="form-label">Username:</label>
+                                        <input type="text" class="form-control" id="newUsername" name="newUsername"
+                                            value="<%= user.username %>"
+                                            style="background-color: var(--mainBG);color:white">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="image" class="form-label">Email:</label>
+                                        <input type="text" class="form-control" id="newEmail" name="newEmail"
+                                            value="<%= user.email %>"
+                                            style="background-color: var(--mainBG);color:white">
+                                    </div>
+                                    <center>
+                                        <button type="submit" class="btn btn-primary w-100"
+                                            style="background-color:#4154f1;color:white;">Update Profile
+                                            Information</button>
+                                    </center>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+        <div id="center-container">
+            <div class="channel-view">
+                <center>
+                    <img src=" <%= c.thumbnail %>" alt="" srcset=""
+                        style="width:100px;height:100px;border-radius:50%;object-fit:cover">
+                    <h6 style="margin: 20px 0 20px 0;">
+                        <%= c.name %>
+                    </h6>
+                </center>
+                <% if ( c.user_id==user.userId ) { %>
+                    <div class="row" style="margin: 0 0 20px 0;">
+                        <div class="col-lg-6">
+                            <center>
+                                <div onClick="location.href='/channel/<%= c.id %>/update';"
+                                    style="cursor: pointer;;border-radius: 10px;padding:6px 20px;border:1px solid var(--primaryBG);color: var(--primaryBG);font-size: 15px;text-decoration: none;">
+                                    Update
+                                    channel</div>
+                            </center>
+                        </div>
+                        <div class="col-lg-6">
+                            <center>
+                                <div
+                                    style="cursor: pointer;;border-radius: 10px;padding:6px 20px;border:1px solid var(--primaryBG);color: var(--primaryBG);font-size: 15px;text-decoration: none;">
+                                    Change
+                                    Thumbnail</div>
+                            </center>
+                        </div>
+                    </div>
+                    <% } %>
+                        <label for="" style="color: var(--textColor);">About:</label>
+
+                        <pre
+                            style="margin:10px 0;white-space: pre-wrap; word-wrap: break-word;color:  var(--textColor); font-weight: 500;font-size:15px"><%= c.description %></pre>
+
+                        <label for="" style="color: var(--textColor);">Category:</label>
+
+                        <p style="color: var(--textColor); margin:5px 0 15px 0">
+                            <%= c.category %>
+                        </p>
+
+                        <label for="" style="color: var(--textColor);">Date created:</label>
+
+                        <p style="color: var(--textColor); margin:5px 0 20px 0">
+                            <%= c.date_created %>
+                        </p>
+            </div>
+        </div>
+    </div>
+
+    <%- include('partials/side.ejs'); -%>
+
+        <%- include('../../partials/footer_client.ejs'); -%>

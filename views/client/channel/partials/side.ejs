@@ -1,0 +1,118 @@
+<div class="col-lg-3 right">
+    <div class=" d-flex align-items-center justify-content-between" style="margin-bottom: 20px;">
+        <h5 style="margin: 0;   font-weight: 400;">Channel Members</h5>
+        <% if (c.user_id==user.userId) { %>
+            <i class="far fa-user-plus" data-bs-toggle="modal" data-bs-target="#addMemberModal"></i>
+            <% }else { %>
+                <% if (c.allow_members_add==2) { %>
+                    <i class="far fa-user-plus" data-bs-toggle="modal" data-bs-target="#addMemberModal"></i>
+                    <% } %>
+                        <% }%>
+    </div>
+    <div class="row" id="members_container">
+
+    </div>
+</div>
+<div class="modal fade" id="addMemberModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content" style="background-color: var(--mainBG); color: white;padding:15px">
+            <div class="modal-body" style="background-color: var(--mainBG);">
+                <div class="mb-3">
+                    <label for="description" class="form-label mb-2" style="font-size:15px;">Enter name or
+                        username:</label>
+                    <input type="text" class="form-control" id="searchMemberInput" name="newUsername"
+                        style="background-color: var(--mainBG);color:white;font-size:15px">
+                    <label for="description" class="form-label mt-3" style="font-size:15px;">Result:</label>
+                    <div class="row" id="s_result">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $.ajax({
+        type: "POST",
+        url: "/channel/<%= c.id %>/getmembers",
+
+        success: function (response) {
+            console.log(response);
+            $('#members_container').html('');
+            if (response.length == 0) {
+                $('#members_container').append(`
+                    <div class="empty" style="margin-top:0;border:none">
+                        <h6>No users found.</h6>
+                    </div>
+                `);
+                return;
+            }
+            response.forEach(element => {
+                let action = "";
+                if ('<%= c.user_id %>' == '<%= user.userId %>' && '<%= c.user_id %>' != element.userID) {
+                    action = '<a href=""><i class="fa-sharp fa-solid fa-xmark"></i></a>';
+                } else if ('<%= c.user_id %>' == element.userID) {
+                    action = '<i class="far fa-crown"></i>';
+                }
+                $('#members_container').append(`
+                <div class="col-lg-12 mb-3">
+                    <div class="user d-flex align-items-center justify-content-between" style="gap: 10px;">
+                        <div class=" d-flex align-items-center" style="gap: 10px;">
+                            <img src="${element.profile_pic}" alt=""
+                                style="width:35px;height:35px;object-fit: cover;border-radius: 50%;">
+                            <div>
+                                <h6 style="font-size: 14px;margin:0 0 2px 0">${element.fullName}</h6>
+                                <p style="font-size: 12px;color:var(--textColor)">${element.username}</p>
+                            </div>
+                        </div>
+                        `+ action + `
+                    </div>
+                </div>
+                `);
+            });
+        }
+    });
+
+    $('#searchMemberInput').keyup(function (e) {
+        $.ajax({
+            type: "POST",
+            url: "/channel/<%= c.id %>/searchuser",
+            data: {
+                'name': $(this).val(),
+            },
+            success: function (response) {
+                console.log('<%= c.id %>');
+                $('#s_result').html('');
+                if (response.length == 0) {
+                    $('#s_result').append(`
+                        <div class="empty" style="margin-top:0;border:none">
+                            <h6>No users found.</h6>
+                        </div>
+                    `);
+                    return;
+                }
+                response.forEach(element => {
+
+
+                    $('#s_result').append(`
+                    <div class="col-lg-12 mt-3">
+                        <div class="user d-flex align-items-center justify-content-between" style="gap: 10px;">
+                            <div class=" d-flex align-items-center" style="gap: 10px;">
+                                <img src="${element.profile_pic}" alt=""
+                                    style="width:35px;height:35px;object-fit: cover;border-radius: 50%;">
+                                <div>
+                                    <h6 style="font-size: 14px;margin:0 0 2px 0">${element.fullName}</h6>
+                                    <p style="font-size: 12px;color:var(--textColor)">dickdick123</p>
+                                </div>  
+                            </div>
+
+                                <a href="/channel/<%= c.id %>/add/${element.userID}"><i class="fa-regular fa-plus"></i></>
+                                
+                        
+                        </div>
+                    </div>
+                    `);
+                });
+            }
+        });
+    });
+</script>
